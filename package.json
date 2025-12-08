@@ -1,0 +1,16 @@
+{
+  "name": "dtube",
+  "version": "1.0.0",
+  "description": "a backened for dtube",
+  "keywords": [
+    "javascript",
+    "backend"
+  ],
+  "license": "ISC",
+  "author": "Deepak Singh",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
