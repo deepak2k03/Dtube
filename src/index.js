@@ -9,6 +9,14 @@ dotenv.config(
         path:'./.env'
     }
 );
+
+console.log("Cloudinary ENV:", {
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME ? "OK" : "MISSING",
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY ? "OK" : "MISSING",
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET ? "OK" : "MISSING",
+});
+
+
 connectDB()
 .then(()=>{
     app.listen(process.env.PORT || 8000 , ()=>{
