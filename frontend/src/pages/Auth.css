@@ -1,0 +1,110 @@
+/* ===== AUTH PAGE ===== */
+
+.auth-page {
+  min-height: 100vh;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 420px;
+  background: #0f0f0f;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ===== TITLES ===== */
+
+.auth-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #fff;
+}
+
+.auth-subtitle {
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 24px;
+}
+
+/* ===== FORM ===== */
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 13px;
+  color: #ccc;
+}
+
+.form-input {
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: #fff;
+  font-size: 14px;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #9333ea;
+}
+
+/* ===== SUBMIT ===== */
+
+.auth-submit {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 999px;
+  background: #9333ea;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+.auth-submit:hover {
+  background: #a855f7;
+}
+
+.auth-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===== TOGGLE ===== */
+
+.auth-toggle {
+  margin-top: 18px;
+  font-size: 14px;
+  color: #aaa;
+  text-align: center;
+}
+
+.auth-toggle-link {
+  color: #a855f7;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-toggle-link:hover {
+  text-decoration: underline;
+}
