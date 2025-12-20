@@ -10,7 +10,7 @@ const Home = () => {
     const fetchVideos = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8000/api/v1/videos"
+          `${import.meta.env.VITE_API_URL}/videos`
         );
 
         // ✅ aggregatePaginate returns docs
