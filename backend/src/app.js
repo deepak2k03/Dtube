@@ -18,27 +18,22 @@ const app = express();
 
 /* ===== CORS ===== */
 
-
-const allowedOrigins = (
-  process.env.CLIENT_URL || ""
-)
-  .split(",")
-  .map((o) => o.trim())
-  .filter(Boolean);
+const allowedOrigins = process.env.CLIENT_URL
+  ? process.env.CLIENT_URL.split(",").map(o => o.trim())
+  : ["http://localhost:5173"];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow server-to-server, Postman, curl
+      // allow server-side tools, curl, postman
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
 
-      return callback(
-        new Error(`CORS blocked: ${origin}`)
-      );
+      console.error("CORS blocked:", origin);
+      return callback(new Error(`CORS blocked: ${origin}`));
     },
     credentials: true,
   })
