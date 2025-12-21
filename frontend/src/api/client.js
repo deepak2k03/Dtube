@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const API_BASE = import.meta.env.VITE_API_URL;
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 if (!API_BASE) {
   console.warn(
-    "VITE_API_URL is not set. Create frontend/.env with VITE_API_URL=http://localhost:8000/api/v1 (or your backend URL)."
+    "VITE_API_BASE_URL is not set. Create frontend/.env with VITE_API_BASE_URL=http://localhost:8000/api/v1 (or your backend URL)."
   );
 }
 
