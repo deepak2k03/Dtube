@@ -26,7 +26,7 @@ const Upload = () => {
     formData.append("description", description);
 
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", `${import.meta.env.VITE_API_URL}/videos`, true);
+    xhr.open("POST", `${import.meta.env.VITE_API_BASE_URL}/videos`, true);
 
     // ✅ send cookies (JWT)
     xhr.withCredentials = true;
