@@ -17,7 +17,7 @@ dotenv.config();
 const app = express();
 
 /* ===== CORS ===== */
-import cors from "cors";
+
 
 const allowedOrigins = (
   process.env.CLIENT_URL || ""
