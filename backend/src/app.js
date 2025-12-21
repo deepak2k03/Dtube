@@ -13,9 +13,11 @@ import commentRouter from "./routes/comment.routes.js";
 const app = express();
 
 /* ===== CORS (PRODUCTION SAFE) ===== */
-const allowedOrigins = process.env.CLIENT_URL
-  ? process.env.CLIENT_URL.split(",").map(o => o.trim())
-  : [];
+const allowedOrigins = (
+  process.env.CORS_ORIGIN ||
+  process.env.CLIENT_URL ||
+  "http://localhost:5173"
+)
 
 app.use(
   cors({
