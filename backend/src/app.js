@@ -17,26 +17,33 @@ dotenv.config();
 const app = express();
 
 /* ===== CORS ===== */
-const allowedOrigins = (process.env.CLIENT_URL || "")
+import cors from "cors";
+
+const allowedOrigins = (
+  process.env.CLIENT_URL || ""
+)
   .split(",")
   .map((o) => o.trim())
   .filter(Boolean);
 
-// fallback for local dev
-if (allowedOrigins.length === 0) {
-  allowedOrigins.push("http://localhost:5173");
-}
-
 app.use(
   cors({
     origin: (origin, callback) => {
+      // Allow server-to-server, Postman, curl
       if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      return callback(new Error("Not allowed by CORS"));
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(
+        new Error(`CORS blocked: ${origin}`)
+      );
     },
     credentials: true,
   })
 );
+
 
 /* ===== MIDDLEWARE ===== */
 app.use(express.json({ limit: "16kb" }));
