@@ -52,7 +52,7 @@ function App() {
               }
             />
 
-            <Route path="/video/:videoId" element={<VideoPlayer />} />
+            <Route path="/video/:videoId" element={<VideoPlayer key={location.pathname} />} />
 
             <Route
               path="/profile"

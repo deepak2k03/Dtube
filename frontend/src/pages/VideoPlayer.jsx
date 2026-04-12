@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "../utils/axios";
 import { useAuth } from "../context/AuthContext";
 
@@ -25,6 +25,12 @@ const VideoPlayer = () => {
   /* ================= FETCH VIDEO ================= */
   useEffect(() => {
     const fetchVideo = async () => {
+      setLoading(true);
+      setInfoMessage("");
+      setVideo(null);
+      setComments([]);
+      setLiked(false);
+      setLikesCount(0);
       try {
         const res = await axios.get(`/videos/${videoId}`);
         const data = res.data.data;
@@ -40,6 +46,10 @@ const VideoPlayer = () => {
     };
 
     fetchVideo();
+  }, [videoId]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
   }, [videoId]);
 
   /* ================= FETCH COMMENTS ================= */
@@ -160,7 +170,13 @@ const VideoPlayer = () => {
       <div className="video-page">
         {/* LEFT */}
         <div className="video-main">
-          <video className="video-player" src={video.videoFile} controls />
+          <video
+            key={video._id}
+            className="video-player"
+            src={video.videoFile}
+            controls
+            autoPlay
+          />
 
           <h2 className="video-title">{video.title}</h2>
 
@@ -232,14 +248,14 @@ const VideoPlayer = () => {
           {recommended
             .filter((v) => v._id !== videoId)
             .map((v) => (
-              <div
+              <Link
                 key={v._id}
                 className="recommended-item"
-                onClick={() => navigate(`/video/${v._id}`)}
+                to={`/video/${v._id}`}
               >
                 <img src={v.thumbnail} alt="" />
                 <p>{v.title}</p>
-              </div>
+              </Link>
             ))}
         </aside>
       </div>

@@ -43,7 +43,7 @@ const NavBar = ({ onMenuClick }) => {
 
           <div className="logo" onClick={() => navigate("/")}>
             <span className="logo-mark">▶</span>
-            <span className="logo-text">Vidget</span>
+            <span className="logo-text">Deetube</span>
           </div>
 
           <div className="search-wrap">
