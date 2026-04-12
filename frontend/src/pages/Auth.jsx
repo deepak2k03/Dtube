@@ -79,8 +79,8 @@ const Auth = () => {
         </h1>
         <p className="auth-subtitle">
           {mode === "login"
-            ? "Sign in to continue to Dtube"
-            : "Join Dtube to start watching videos"}
+            ? "Sign in to continue to Vidget"
+            : "Join Vidget to start watching videos"}
         </p>
 
         <form className="auth-form" onSubmit={handleSubmit}>

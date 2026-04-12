@@ -1,16 +1,25 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import { useSearchParams } from "react-router-dom";
+import client from "../api/client.js";
+import VideoCard from "../components/VideoCard.jsx";
 
 const Home = () => {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("q") || "";
 
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/videos`
+        const res = await client.get(
+          "/videos",
+          {
+            params: {
+              limit: 24,
+              ...(query ? { query } : {}),
+            },
+          }
         );
 
         // ✅ aggregatePaginate returns docs
@@ -30,37 +39,38 @@ const Home = () => {
     };
 
     fetchVideos();
-  }, []);
+  }, [query]);
 
   if (loading) return <p>Loading videos...</p>;
 
   if (!videos.length) {
-    return <p>No videos yet. Be the first to upload!</p>;
+    return <p>{query ? `No videos found for "${query}"` : "No videos yet. Be the first to upload!"}</p>;
   }
 
   return (
-    <div className="video-grid">
-      {videos.map((video) => (
-        <Link
-          key={video._id}
-          to={`/video/${video._id}`}
-          className="video-card"
-        >
-          <img
-            src={video.thumbnail}
-            alt={video.title}
-            className="video-thumb"
-          />
+    <>
+      <div className="home-filters">
+        {[
+          "All",
+          "Music",
+          "Gaming",
+          "Live",
+          "Podcasts",
+          "Recently uploaded",
+          "News",
+        ].map((chip, index) => (
+          <button key={chip} className={`filter-chip ${index === 0 ? "active" : ""}`}>
+            {chip}
+          </button>
+        ))}
+      </div>
 
-          <div className="video-info">
-            <h4 className="video-title">{video.title}</h4>
-            <p className="video-meta">
-              {video.owner?.username}
-            </p>
-          </div>
-        </Link>
-      ))}
-    </div>
+      <div className="video-grid">
+        {videos.map((video) => (
+          <VideoCard key={video._id} video={video} />
+        ))}
+      </div>
+    </>
   );
 };
 

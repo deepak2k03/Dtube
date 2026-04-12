@@ -31,12 +31,15 @@ const VideoCard = ({ video }) => {
 
   return (
     <Link to={`/video/${video._id}`} className="video-card">
-      <img
-        src={video.thumbnail || "/placeholder.jpg"}
-        alt={video.title}
-        className="video-thumbnail"
-        loading="lazy"
-      />
+      <div className="video-thumb-wrap">
+        <img
+          src={video.thumbnail || "/placeholder.jpg"}
+          alt={video.title}
+          className="video-thumbnail"
+          loading="lazy"
+        />
+        <span className="video-duration">{formatDuration(video.duration)}</span>
+      </div>
       <div className="video-info">
         <img
           src={video.owner?.avatar || "/default-avatar.png"}
@@ -45,11 +48,11 @@ const VideoCard = ({ video }) => {
         />
         <div className="video-details">
           <h3 className="video-title">{video.title}</h3>
-          <p className="video-meta">
-            {formatViews(video.views)} • {formatTimeAgo(video.createdAt)}
-          </p>
           <p className="video-creator">
             {video.owner?.fullName || video.owner?.username || "Unknown"}
+          </p>
+          <p className="video-meta">
+            {formatViews(video.views)} • {formatTimeAgo(video.createdAt)}
           </p>
         </div>
       </div>

@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL;
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
-if (!API_BASE) {
+if (!import.meta.env.VITE_API_BASE_URL) {
   console.warn(
-    "VITE_API_BASE_URL is not set. Create frontend/.env with VITE_API_BASE_URL=http://localhost:8000/api/v1 (or your backend URL)."
+    "Using default API base http://localhost:8000/api/v1. Set VITE_API_BASE_URL in frontend/.env for production/deployment."
   );
 }
 
@@ -14,7 +14,7 @@ export const client = axios.create({
 });
 
 client.interceptors.request.use((config) => {
-  const stored = localStorage.getItem("dtube_tokens");
+  const stored = localStorage.getItem("Vidget_tokens");
   if (stored) {
     try {
       const { accessToken } = JSON.parse(stored);

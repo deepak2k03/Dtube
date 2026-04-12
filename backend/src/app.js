@@ -9,15 +9,15 @@ import userRouter from "./routes/user.routes.js";
 import videoRouter from "./routes/video.routes.js";
 import subscriptionRouter from "./routes/subscription.routes.js";
 import commentRouter from "./routes/comment.routes.js";
+import { ApiError } from "./utils/ApiError.js";
 
 const app = express();
 
 /* ===== CORS (PRODUCTION SAFE) ===== */
-const allowedOrigins = (
-  process.env.CORS_ORIGIN ||
-  process.env.CLIENT_URL ||
-  "http://localhost:5173"
-)
+const allowedOrigins = (process.env.CORS_ORIGIN || process.env.CLIENT_URL || "http://localhost:5173")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 app.use(
   cors({
@@ -51,5 +51,23 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/videos", videoRouter);
 app.use("/api/v1/subscriptions", subscriptionRouter);
 app.use("/api/v1/comments", commentRouter);
+
+/* ===== ERROR HANDLER ===== */
+app.use((err, req, res, next) => {
+  if (err instanceof ApiError) {
+    return res.status(err.statusCode).json({
+      success: false,
+      message: err.message,
+      errors: err.errors,
+      data: err.data,
+    });
+  }
+
+  console.error("Unhandled error:", err);
+  return res.status(500).json({
+    success: false,
+    message: "Internal server error",
+  });
+});
 
 export { app };

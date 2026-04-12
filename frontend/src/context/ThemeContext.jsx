@@ -4,13 +4,13 @@ const ThemeContext = createContext(null);
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(
-    () => localStorage.getItem("dtube_theme") || "dark"
+    () => localStorage.getItem("Vidget_theme") || "dark"
   );
 
   useEffect(() => {
   const root = document.documentElement;
   root.setAttribute("data-theme", theme);
-  localStorage.setItem("dtube_theme", theme);
+  localStorage.setItem("Vidget_theme", theme);
 }, [theme]);
 
 

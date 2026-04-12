@@ -5,10 +5,17 @@ import axios from "../utils/axios";
 const Channel = () => {
   const { username } = useParams();
   const [channel, setChannel] = useState(null);
+  const [error, setError] = useState("");
 
   const fetchChannel = async () => {
-    const res = await axios.get(`/users/channel/${username}`);
-    setChannel(res.data.data);
+    try {
+      const res = await axios.get(`/users/c/${username}`);
+      setChannel(res.data.data);
+      setError("");
+    } catch {
+      setError("Unable to load channel");
+      setChannel(null);
+    }
   };
 
   const toggleSubscribe = async () => {
@@ -20,12 +27,13 @@ const Channel = () => {
     fetchChannel();
   }, [username]);
 
-  if (!channel) return null;
+  if (error) return <p>{error}</p>;
+  if (!channel) return <p>Loading channel...</p>;
 
   return (
-    <div className="content-area">
-      <img src={channel.coverImage} width="100%" />
-      <img src={channel.avatar} width={80} />
+    <div className="channel-page">
+      {channel.coverImage ? <img src={channel.coverImage} className="channel-cover" alt="cover" /> : null}
+      <img src={channel.avatar} width={80} alt={channel.username} />
 
       <h2>{channel.fullName}</h2>
       <p>@{channel.username}</p>

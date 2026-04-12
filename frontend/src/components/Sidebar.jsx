@@ -23,57 +23,54 @@ const Sidebar = ({ open, onClose }) => {
       {open && <div className="sidebar-overlay" onClick={onClose} />}
 
       <aside className={`sidebar ${open ? "open" : ""}`}>
-        {/* HOME */}
         <NavLink to="/" end onClick={handleNormalClick}>
-          Home
+          <span className="nav-icon">🏠</span>
+          <span>Home</span>
         </NavLink>
 
-        {/* WATCH LATER */}
         <NavLink
           to="/watch-later"
           onClick={(e) => handleProtectedClick(e, "/watch-later")}
         >
-          Watch Later
+          <span className="nav-icon">🕒</span>
+          <span>Watch Later</span>
         </NavLink>
 
-        {/* PLAYLISTS */}
         <NavLink
           to="/playlists"
           onClick={(e) => handleProtectedClick(e, "/playlists")}
         >
-          Playlists
+          <span className="nav-icon">📚</span>
+          <span>Playlists</span>
         </NavLink>
 
-        {/* LIKED */}
-        <NavLink
-          to="/liked"
-          onClick={(e) => handleProtectedClick(e, "/liked")}
-        >
-          Liked Videos
+        <NavLink to="/search" onClick={handleNormalClick}>
+          <span className="nav-icon">🔎</span>
+          <span>Search Channels</span>
         </NavLink>
 
-        {/* HISTORY */}
         <NavLink
           to="/history"
           onClick={(e) => handleProtectedClick(e, "/history")}
         >
-          History
+          <span className="nav-icon">🧾</span>
+          <span>History</span>
         </NavLink>
 
-        {/* UPLOAD */}
         <NavLink
           to="/upload"
           onClick={(e) => handleProtectedClick(e, "/upload")}
         >
-          Upload
+          <span className="nav-icon">⤴</span>
+          <span>Upload</span>
         </NavLink>
 
-        {/* MY CONTENT */}
         <NavLink
-          to="/my-videos"
-          onClick={(e) => handleProtectedClick(e, "/my-videos")}
+          to="/profile"
+          onClick={(e) => handleProtectedClick(e, "/profile")}
         >
-          My Content
+          <span className="nav-icon">👤</span>
+          <span>Profile</span>
         </NavLink>
       </aside>
     </>

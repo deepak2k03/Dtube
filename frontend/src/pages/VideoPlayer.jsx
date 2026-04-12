@@ -13,6 +13,7 @@ const VideoPlayer = () => {
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState("");
   const [loading, setLoading] = useState(true);
+  const [infoMessage, setInfoMessage] = useState("");
 
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
@@ -88,7 +89,7 @@ const VideoPlayer = () => {
 
     try {
       await axios.post(`/watch-later/${videoId}`);
-      alert("Added to Watch Later");
+      setInfoMessage("Watch Later updated");
     } catch (err) {
       console.error(err);
     }
@@ -166,11 +167,11 @@ const VideoPlayer = () => {
           <div className="video-actions">
             <div className="video-owner">
               <img
-                src={video.owner.avatar}
+                src={video.owner?.avatar}
                 alt=""
                 className="video-avatar"
               />
-              <span>{video.owner.username}</span>
+              <span>{video.owner?.username}</span>
             </div>
 
             <div className="action-buttons">
@@ -198,6 +199,7 @@ const VideoPlayer = () => {
           </div>
 
           <p className="video-description">{video.description}</p>
+          {infoMessage ? <p className="video-status-msg">{infoMessage}</p> : null}
 
           {/* COMMENTS */}
           <div className="comments-section">
@@ -259,7 +261,7 @@ const VideoPlayer = () => {
             ) : (
               <div className="playlist-list">
                 {playlists.map((p) => {
-                  const exists = p.videos?.includes(videoId);
+                  const exists = p.videos?.some((v) => (typeof v === "string" ? v : v?._id || v?.toString()) === videoId);
 
                   return (
                     <label key={p._id} className="playlist-row">

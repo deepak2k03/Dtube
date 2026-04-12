@@ -9,13 +9,17 @@ const NavBar = ({ onMenuClick }) => {
   const { theme, toggleTheme } = useTheme();
 
   const [query, setQuery] = useState("");
-  const [showMobileSearch, setShowMobileSearch] = useState(false);
   const [open, setOpen] = useState(false);
 
+  const submitSearch = () => {
+    const trimmed = query.trim();
+    if (!trimmed) return;
+    navigate(`/search?q=${encodeURIComponent(trimmed)}`);
+  };
+
   const handleSearch = (e) => {
-    if (e.key === "Enter" && query.trim()) {
-      navigate(`/?q=${encodeURIComponent(query)}`);
-      setShowMobileSearch(false);
+    if (e.key === "Enter") {
+      submitSearch();
     }
   };
 
@@ -28,7 +32,6 @@ const NavBar = ({ onMenuClick }) => {
   return (
     <>
       <header className="top-header">
-        {/* LEFT */}
         <div className="header-left">
           <button
             className="menu-btn"
@@ -39,31 +42,27 @@ const NavBar = ({ onMenuClick }) => {
           </button>
 
           <div className="logo" onClick={() => navigate("/")}>
-            Dtube
+            <span className="logo-mark">▶</span>
+            <span className="logo-text">Vidget</span>
           </div>
 
-          {/* Desktop search */}
-          <input
-            className="search-input"
-            placeholder="Search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={handleSearch}
-          />
+          <div className="search-wrap">
+            <input
+              className="search-input"
+              placeholder="Search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={handleSearch}
+            />
+            <button className="search-submit" aria-label="Search" onClick={submitSearch}>
+              🔍
+            </button>
+          </div>
         </div>
 
-        {/* RIGHT */}
         <div className="header-right">
-          {/* Mobile search toggle */}
-          <button
-            className="search-icon"
-            onClick={() => setShowMobileSearch((v) => !v)}
-            aria-label="Search"
-          >
-            🔍
-          </button>
+          <button className="create-btn" onClick={() => navigate("/upload")}>Create</button>
 
-          {/* Theme toggle */}
           <button
             className="header-icon"
             onClick={toggleTheme}
@@ -72,7 +71,6 @@ const NavBar = ({ onMenuClick }) => {
             {theme === "dark" ? "🌙" : "☀️"}
           </button>
 
-          {/* Avatar */}
           {isAuthenticated && (
             <div className="avatar-wrapper">
               <img
@@ -104,22 +102,12 @@ const NavBar = ({ onMenuClick }) => {
               )}
             </div>
           )}
+
+          {!isAuthenticated && (
+            <button className="signin-btn" onClick={() => navigate("/auth")}>Sign in</button>
+          )}
         </div>
       </header>
-
-      {/* MOBILE SEARCH BOX */}
-      {showMobileSearch && (
-        <div className="mobile-search-box">
-          <input
-            className="search-input"
-            placeholder="Search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={handleSearch}
-            autoFocus
-          />
-        </div>
-      )}
     </>
   );
 };

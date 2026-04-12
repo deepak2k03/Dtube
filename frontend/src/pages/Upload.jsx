@@ -1,4 +1,5 @@
 import { useState } from "react";
+import client from "../api/client.js";
 
 const Upload = () => {
   const [video, setVideo] = useState(null);
@@ -10,7 +11,7 @@ const Upload = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
 
@@ -25,49 +26,32 @@ const Upload = () => {
     formData.append("title", title);
     formData.append("description", description);
 
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", `${import.meta.env.VITE_API_BASE_URL}/videos`, true);
-
-    // ✅ send cookies (JWT)
-    xhr.withCredentials = true;
-
     setLoading(true);
     setProgress(0);
 
-    // ✅ UPLOAD PROGRESS
-    xhr.upload.onprogress = (event) => {
-      if (event.lengthComputable) {
-        const percent = Math.round((event.loaded / event.total) * 100);
-        setProgress(percent);
-      }
-    };
+    try {
+      await client.post("/videos", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        onUploadProgress: (event) => {
+          if (!event.total) return;
+          const percent = Math.round((event.loaded / event.total) * 100);
+          setProgress(percent);
+        },
+      });
 
-    xhr.onload = () => {
+      setMessage("Video uploaded successfully");
+
+      setVideo(null);
+      setThumbnail(null);
+      setTitle("");
+      setDescription("");
+      setProgress(0);
+    } catch (error) {
+      const message = error?.response?.data?.message || "Upload failed";
+      setMessage(message);
+    } finally {
       setLoading(false);
-
-      if (xhr.status >= 200 && xhr.status < 300) {
-        const res = JSON.parse(xhr.responseText);
-        console.log("Upload success:", res);
-        setMessage("✅ Video uploaded successfully");
-
-        // reset
-        setVideo(null);
-        setThumbnail(null);
-        setTitle("");
-        setDescription("");
-        setProgress(0);
-      } else {
-        console.error(xhr.responseText);
-        setMessage("❌ Upload failed");
-      }
-    };
-
-    xhr.onerror = () => {
-      setLoading(false);
-      setMessage("❌ Network error");
-    };
-
-    xhr.send(formData);
+    }
   };
 
   return (

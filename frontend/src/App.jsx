@@ -14,6 +14,7 @@ import Search from "./pages/Search";
 import Channel from "./pages/Channel";
 import Playlists from "./pages/Playlists";
 import PlaylistDetails from "./pages/PlaylistDetails";
+import WatchLater from "./pages/WatchLater";
 
 function App() {
   const location = useLocation();
@@ -72,8 +73,9 @@ function App() {
             />
             <Route path="/search" element={<Search />} />
             <Route path="/channel/:username" element={<Channel />} />
-            <Route path="/playlists" element={<Playlists />} />
-            <Route path="/playlists/:playlistId" element={<PlaylistDetails />} />
+            <Route path="/watch-later" element={<ProtectedRoute><WatchLater /></ProtectedRoute>} />
+            <Route path="/playlists" element={<ProtectedRoute><Playlists /></ProtectedRoute>} />
+            <Route path="/playlists/:playlistId" element={<ProtectedRoute><PlaylistDetails /></ProtectedRoute>} />
 
 
             <Route path="*" element={<Navigate to="/" replace />} />

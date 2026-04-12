@@ -39,6 +39,7 @@ router.use(verifyJWT);
 
 router.post("/logout", logoutUser);
 router.get("/current-user", getCurrentUser);
+router.post("/change-password", changeCurrentUserPassword);
 router.patch("/update-account", updateAccountDetails);
 router.patch("/avatar", upload.single("avatar"), updateUserAvatar);
 router.patch("/coverImage", upload.single("coverImage"), updateUserCoverImage);

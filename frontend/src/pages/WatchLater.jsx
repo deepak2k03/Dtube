@@ -1,34 +1,30 @@
 import { useEffect, useState } from "react";
 import axios from "../utils/axios";
-import { useNavigate } from "react-router-dom";
+import VideoCard from "../components/VideoCard.jsx";
 
 const WatchLater = () => {
   const [videos, setVideos] = useState([]);
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchWatchLater = async () => {
-      const res = await axios.get("/watch-later");
-      setVideos(res.data.data || []);
+      try {
+        const res = await axios.get("/watch-later");
+        setVideos(res.data.data || []);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchWatchLater();
   }, []);
 
+  if (loading) return <p>Loading Watch Later...</p>;
   if (!videos.length) return <p>No videos in Watch Later</p>;
 
   return (
     <div className="video-grid">
-      {videos.map((v) => (
-        <div
-          key={v._id}
-          className="video-card"
-          onClick={() => navigate(`/video/${v._id}`)}
-        >
-          <img src={v.thumbnail} className="video-thumb" />
-          <p>{v.title}</p>
-        </div>
-      ))}
+      {videos.map((v) => <VideoCard key={v._id} video={v} />)}
     </div>
   );
 };

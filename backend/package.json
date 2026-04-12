@@ -1,7 +1,7 @@
 {
-  "name": "dtube",
+  "name": "Vidget",
   "version": "1.0.0",
-  "description": "a backened for dtube",
+  "description": "a backened for Vidget",
   "keywords": [
     "javascript",
     "backend"

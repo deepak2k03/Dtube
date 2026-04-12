@@ -9,6 +9,8 @@ import client from "../api/client.js";
 
 const AuthContext = createContext(null);
 
+const TOKENS_KEY = "Vidget_tokens";
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -33,6 +35,13 @@ export const AuthProvider = ({ children }) => {
     try {
       const { data } = await client.post("/users/login", payload);
       setUser(data.data.user);
+      localStorage.setItem(
+        TOKENS_KEY,
+        JSON.stringify({
+          accessToken: data.data.accessToken,
+          refreshToken: data.data.refreshToken,
+        })
+      );
       return { ok: true };
     } catch (error) {
       const message =
@@ -68,6 +77,7 @@ export const AuthProvider = ({ children }) => {
       console.error("Failed to logout", error);
     } finally {
       setUser(null);
+      localStorage.removeItem(TOKENS_KEY);
     }
   };
 

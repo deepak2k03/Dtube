@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap");
 
 :root {
   --primary: #9333ea;
@@ -30,9 +30,17 @@ body,
 }
 
 body {
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-family: "Manrope", "Segoe UI", sans-serif;
   background: var(--bg);
   color: var(--text-primary);
+}
+
+h1,
+h2,
+h3,
+h4,
+.logo {
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
 }
 
 a {
@@ -46,4 +54,9 @@ input {
   background: none;
   border: none;
   color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
 }

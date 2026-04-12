@@ -5,6 +5,7 @@ import { Video } from "../models/video.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import mongoose from "mongoose";
 import { Like } from "../models/like.model.js";
+import { User } from "../models/user.model.js";
 
 const getAllVideos = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query;
@@ -163,22 +164,38 @@ const getVideoById = asyncHandler(async (req, res) => {
     },
   });
 
-  return res
-    .status(200)
-    .json(new ApiResponse(200, video[0], "Video fetched successfully"));
+  if (req.user?._id) {
+    await User.findByIdAndUpdate(req.user._id, {
+      $pull: { watchHistory: video[0]._id },
+    });
+
+    await User.findByIdAndUpdate(req.user._id, {
+      $push: { watchHistory: video[0]._id },
+    });
+  }
 
   const likesCount = await Like.countDocuments({
-    video: video._id,
+    video: video[0]._id,
   });
 
   let isLiked = false;
-  if (req.user) {
+  if (req.user?._id) {
     const liked = await Like.findOne({
-      video: video._id,
-      likedBy: req.user._id,
+      video: video[0]._id,
+      user: req.user._id,
     });
-    isLiked = !!liked;
+    isLiked = Boolean(liked);
   }
+
+  const payload = {
+    ...video[0],
+    likesCount,
+    isLiked,
+  };
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, payload, "Video fetched successfully"));
 });
 
 const updateVideo = asyncHandler(async (req, res) => {

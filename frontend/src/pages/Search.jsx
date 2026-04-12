@@ -1,16 +1,54 @@
 import { useState } from "react";
+import { useEffect } from "react";
 import axios from "../utils/axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Search = () => {
   const [q, setQ] = useState("");
   const [users, setUsers] = useState([]);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    const current = (searchParams.get("q") || "").trim();
+    setQ(current);
+
+    const run = async () => {
+      if (!current) {
+        setUsers([]);
+        setError("");
+        return;
+      }
+
+      try {
+        setError("");
+        const res = await axios.get(`/users/search?q=${encodeURIComponent(current)}`);
+        setUsers(res.data.data || []);
+      } catch {
+        setError("Search failed. Try again.");
+      }
+    };
+
+    run();
+  }, [searchParams]);
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    const res = await axios.get(`/users/search?q=${q}`);
-    setUsers(res.data.data);
+    if (!q.trim()) {
+      setUsers([]);
+      setSearchParams({});
+      return;
+    }
+
+    try {
+      setError("");
+      setSearchParams({ q: q.trim() });
+      const res = await axios.get(`/users/search?q=${encodeURIComponent(q.trim())}`);
+      setUsers(res.data.data || []);
+    } catch {
+      setError("Search failed. Try again.");
+    }
   };
 
   return (
@@ -22,6 +60,8 @@ const Search = () => {
           onChange={(e) => setQ(e.target.value)}
         />
       </form>
+
+      {error ? <p>{error}</p> : null}
 
       {users.map((u) => (
         <div
